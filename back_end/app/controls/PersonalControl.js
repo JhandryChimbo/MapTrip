@@ -27,26 +27,37 @@ class PersonalControl {
 
     //TODO: FIX guardar_personal method to save data in the database
     async guardar_personal(req, res) {
-        if (req.body.hasOwnProperty("apellidos") && req.body.hasOwnProperty("nombres") && req.body.hasOwnProperty("celular") && req.body.hasOwnProperty("correo") && req.body.hasOwnProperty("clave")) {
-            try {
-                let personalA = await this.personal.create({
-                    apellidos: req.body.apellidos,
-                    nombres: req.body.nombres,
-                    celular: req.body.celular,
-                });
-                let cuentaA = await this.cuenta.create({
-                    correo: req.body.correo,
-                    clave: req.body.clave,
-                    id_personal: personalA.id,
-                });
-                res.status(200).json({ msg: "OK", tag: "Personal creado", code: 200 });
-            } catch (error) {
-                res.status(500).json(error);
+        const { apellidos, nombres, celular, correo, clave } = req.body;
+        if (!apellidos || !nombres || !celular || !correo || !clave) {
+            return res.status(400).json({ msg: "ERROR", tag: "Faltan datos", code: 400 });
+        }
+        const uuid = require("uuid");
+        const data = {
+            nombres,
+            external_id: uuid.v4(),
+            celular,
+            apellidos,
+            cuenta: {
+                estado: true,
+                correo,
+                clave,
+            },
+        };
+        try {
+            const transaction = await models.sequelize.transaction();
+            const result = await personal.create(data, {
+                include: [{ model: models.cuenta, as: "cuenta" }],
+                transaction,
+            });
+            await transaction.commit();
+
+            if (!result) {
+                return res.status(401).json({ msg: "ERROR", tag: "No se pudo guardar", code: 401 });
             }
-
-        } else {
-            res.status(400).json({ msg: "ERROR", tag: "Faltan datos", code: 400 });
-
+            res.status(200).json({ msg: "OK", tag: "Cuenta creada correctamente", code: 200 });
+        } catch (error) {
+            if (transaction) await transaction.rollback();
+            res.status(500).json({ msg: "ERROR", tag: error.message, code: 500 });
         }
     }
 }
