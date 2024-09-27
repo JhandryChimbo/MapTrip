@@ -19,7 +19,7 @@ MAP TRIP es una aplicación diseñada para consultar lugares populares de la ciu
 
 1. Clona el repositorio:
     ```bash
-    git clone https://github.com/tu-usuario/map-trip.git
+    git clone https://github.com/JhandryChimbo/MapTrip.git
     ```
 2. Navega al directorio del backend:
     ```bash
