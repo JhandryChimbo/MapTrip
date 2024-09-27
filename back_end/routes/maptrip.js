@@ -18,6 +18,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/listar', LugarControl.listar_lugares);
+router.get('/listar_tipo', LugarControl.listar_lugares_tipo);
 
 router.post('/guardar', PersonalControl.guardar_personal);
 

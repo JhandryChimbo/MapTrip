@@ -34,6 +34,25 @@ class LugarControl {
             res.json({ msg: "OK", tag: "Listo :)", datos: lugaresA, code: 200 });
         }
     }
+
+    async listar_lugares_tipo(req, res) {
+        if (req.body.hasOwnProperty("tipo") && Array.isArray(req.body.tipo)) {
+            let lugaresA = await lugar.findAll({
+                where: { tipo: { [models.Sequelize.Op.in]: req.body.tipo } },
+            });
+            if (lugaresA.length === 0) {
+                res.status(400);
+                res.json({ msg: "ERROR", tag: "No hay lugares", code: 400 });
+            } else {
+                res.status(200);
+                res.json({ msg: "OK", tag: "Listo :)", datos: lugaresA, code: 200 });
+            }
+        } else {
+            res.status(400);
+            res.json({ msg: "ERROR", tag: "Faltan datos o tipo no es un array", code: 400 });
+        }
+    }
+
     async obtener_lugar(req, res) {
         if (req.body.hasOwnProperty("external_id")) {
             let lugarA = await lugar.findOne({
