@@ -20,7 +20,19 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/maptrip', usersRouter);
+
+//syn models
+let models = require("./app/models");
+models.sequelize
+  .sync()
+  .then(() => {
+    console.log("Todo bien sincronizado ");
+  })
+  .catch((err) => {
+    console.log(err, "Error en la sincronización");
+  });
+// fin syn models
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
