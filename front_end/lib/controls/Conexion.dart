@@ -6,10 +6,10 @@ import 'package:front_end/controls/util/Utiles.dart';
 
 class Conexion {
   // CASA
-  final String URL = "http://192.168.0.105:3000/maptrip/";
-  
+  final String URL = "http://192.168.0.103:3000/maptrip/";
+
   static bool NO_TOKEN = false;
-  //anime-token
+  //maptrip-token
   Future<RespuestaGenerica> solicitudGet(String recurso, bool token) async {
     Map<String, String> header = {"Content-Type": "application/json"};
 
@@ -18,7 +18,7 @@ class Conexion {
       String? tokenA = await util.getValue("token");
       header = {
         "Content-Type": "application/json",
-        "anime-token": tokenA.toString(),
+        "maptrip-token": tokenA.toString(),
       };
     }
 
@@ -53,7 +53,7 @@ class Conexion {
       String? token = await util.getValue('token');
       header = {
         'Content-Type': 'application/json',
-        'anime-token': token.toString(),
+        'maptrip-token': token.toString(),
       };
     }
 
@@ -91,7 +91,7 @@ class Conexion {
       String? token = await util.getValue('token');
       header = {
         'Content-Type': 'application/json',
-        'anime-token': token.toString(),
+        'maptrip-token': token.toString(),
       };
     }
 
