@@ -91,6 +91,7 @@ class _MapViewState extends State<MapView> {
   };
 
   List<Map<String, dynamic>> selectedPoints = [];
+  bool isPanelOpen = false;
 
   @override
   void initState() {
@@ -154,32 +155,36 @@ class _MapViewState extends State<MapView> {
     );
   }
 
+  void _togglePanel() {
+    setState(() {
+      isPanelOpen = !isPanelOpen;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mapa de Lugares'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: _togglePanel,
+          ),
+        ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            flex: 1,
-            child: ListView(
-              children: categories.keys.map((category) {
-                return CheckboxListTile(
-                  title: Text(category),
-                  value: selectedCategories.contains(category),
-                  onChanged: (value) => _onCategoryChanged(value, category),
-                );
-              }).toList(),
-            ),
+          Column(
+            children: [
+              Expanded(
+                child: myPosition != const LatLng(0, 0)
+                    ? _buildMapa()
+                    : _buildLoading(),
+              ),
+            ],
           ),
-          Expanded(
-            flex: 3,
-            child: myPosition != const LatLng(0, 0)
-                ? _buildMapa()
-                : _buildLoading(),
-          ),
+          if (isPanelOpen) _buildCategoryPanel(),
         ],
       ),
     );
@@ -239,6 +244,62 @@ class _MapViewState extends State<MapView> {
   Widget _buildLoading() {
     return const Center(
       child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _buildCategoryPanel() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: 300,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                width: 50,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                children: categories.keys.map((category) {
+                  return CheckboxListTile(
+                    title: Text(category),
+                    value: selectedCategories.contains(category),
+                    onChanged: (value) => _onCategoryChanged(value, category),
+                  );
+                }).toList(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: _togglePanel,
+                child: const Text('Cerrar Panel'),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

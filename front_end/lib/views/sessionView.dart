@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
@@ -41,7 +42,7 @@ class _SessionviewState extends State<Sessionview> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/fondoInicio.jpeg"),
+                image: AssetImage("assets/fondoInicio.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -50,120 +51,129 @@ class _SessionviewState extends State<Sessionview> {
             padding: const EdgeInsets.all(16),
             child: Center(
               child: SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        const Color.fromARGB(255, 24, 79, 135).withOpacity(0.5),
-                        Colors.white.withOpacity(0.5),
-                      ],
-                    ),
-                  ),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        const Text(
-                          "Map Trip",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                          ),
-                          textAlign: TextAlign.center,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            const Color.fromARGB(255, 255, 255, 255).withOpacity(0.1),
+                            Colors.white.withOpacity(0.1),
+                          ],
                         ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          "Inicio de Sesión",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.2),
                         ),
-                        const SizedBox(height: 20),
-                        TextFormField(
-                          controller: correoControl,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Debe ingresar un correo";
-                            }
-                            if (!isEmail(value)) {
-                              return "Debe ingresar un correo válido";
-                            }
-                            return null;
-                          },
-                          decoration: const InputDecoration(
-                            labelText: "Correo",
-                            prefixIcon: Icon(Icons.email),
-                            prefixIconColor: Colors.white,
-                            labelStyle: TextStyle(color: Colors.white),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            const Text(
+                              "Map Trip",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
+                            const SizedBox(height: 20),
+                            const Text(
+                              "Inicio de Sesión",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                          style: const TextStyle(color: Colors.white),
+                            const SizedBox(height: 20),
+                            TextFormField(
+                              controller: correoControl,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Debe ingresar un correo";
+                                }
+                                if (!isEmail(value)) {
+                                  return "Debe ingresar un correo válido";
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                labelText: "Correo",
+                                prefixIcon: Icon(Icons.email),
+                                prefixIconColor: Colors.white,
+                                labelStyle: TextStyle(color: Colors.white),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                ),
+                              ),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            const SizedBox(height: 20),
+                            TextFormField(
+                              obscureText: true,
+                              controller: claveControl,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Debe ingresar una clave";
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                labelText: "Clave",
+                                prefixIcon: Icon(Icons.lock),
+                                prefixIconColor: Colors.white,
+                                labelStyle: TextStyle(color: Colors.white),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                ),
+                              ),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: _iniciar,
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.white.withOpacity(0.5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                side: const BorderSide(color: Colors.white),
+                              ),
+                              child: const Text(
+                                "Iniciar Sesión",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                          ],
                         ),
-                        const SizedBox(height: 20),
-                        TextFormField(
-                          obscureText: true,
-                          controller: claveControl,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "Debe ingresar una clave";
-                            }
-                            return null;
-                          },
-                          decoration: const InputDecoration(
-                            labelText: "Clave",
-                            prefixIcon: Icon(Icons.lock),
-                            prefixIconColor: Colors.white,
-                            labelStyle: TextStyle(color: Colors.white),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                          ),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: _iniciar,
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.white.withOpacity(0.5),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            side: const BorderSide(color: Colors.white),
-                          ),
-                          child: const Text(
-                            "Iniciar Sesión",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
