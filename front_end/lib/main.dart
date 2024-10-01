@@ -1,5 +1,7 @@
+
 import 'package:flutter/material.dart';
 import 'package:front_end/views/sessionView.dart';
+import 'package:front_end/views/mapView.dart';
 import 'package:front_end/views/exception/Page404.dart';
 
 void main() {
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/home',
       routes: {
         '/home': (context) => const Sessionview(),
+        '/mapa': (context) => const MapView(),
 
       },
       onGenerateRoute: (settings) {

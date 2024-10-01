@@ -1,11 +1,8 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:front_end/controls/servicio_back/FacadeService.dart';
-import 'package:front_end/controls/util/Utiles.dart';
 import 'package:validators/validators.dart';
 
 class Sessionview extends StatefulWidget {
-  const Sessionview({super.key, superKey});
+  const Sessionview({super.key});
   @override
   _SessionviewState createState() => _SessionviewState();
 }
@@ -16,41 +13,27 @@ class _SessionviewState extends State<Sessionview> {
   final TextEditingController claveControl = TextEditingController();
 
   void _iniciar() {
-    setState(() {
-      Facadeservice servicio = Facadeservice();
-      if (_formKey.currentState!.validate()) {
-        Map<String, String> mapa = {
-          "correo": correoControl.text,
-          "clave": claveControl.text
-        };
-        log(mapa.toString());
-        servicio.inicioSesion(mapa).then((value) async {
-          if (value.code == 200) {
-            log(value.datos['token']);
-            log(value.datos['user']);
-            Utiles util = Utiles();
-            util.saveValue('token', value.datos['token']);
-            util.saveValue('user', value.datos['user']);
-            util.saveValue('id', value.datos['id']);
-            final SnackBar msg =
-                SnackBar(content: Text("BIENVENIDO ${value.datos['user']}"));
-            ScaffoldMessenger.of(context).showSnackBar(msg);
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/home',
-              (Route<dynamic> route) => false,
-            );
-          } else {
-            final SnackBar msg = SnackBar(content: Text("Error ${value.tag}"));
-            ScaffoldMessenger.of(context).showSnackBar(msg);
-          }
-        });
+    if (_formKey.currentState!.validate()) {
+      // Simular la verificación de los datos quemados
+      if (correoControl.text == 'jhandrychimbo@gmail.com' &&
+          claveControl.text == '123456789') {
+        // Redirige a la siguiente pantalla
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/mapa',
+          (Route<dynamic> route) => false,
+        );
       } else {
-        log("Errores");
+        // Mostrar error si los datos son incorrectos
+        final SnackBar msg = SnackBar(
+          content: const Text("Correo o clave incorrectos"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(msg);
       }
-    });
+    }
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -174,35 +157,6 @@ class _SessionviewState extends State<Sessionview> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: <Widget>[
-                        //     const Text(
-                        //       "¿No tienes una cuenta?",
-                        //       style: TextStyle(
-                        //         color: Colors.white,
-                        //       ),
-                        //     ),
-                        //     TextButton(
-                        //       onPressed: () {
-                        //         Navigator.pushNamedAndRemoveUntil(
-                        //           context,
-                        //           '/register',
-                        //           (Route<dynamic> route) => false,
-                        //         );
-                        //       },
-                        //       child: const Text(
-                        //         "Regístrate",
-                        //         style: TextStyle(
-                        //             color: Colors.white,
-                        //             fontSize: 16,
-                        //             fontWeight: FontWeight.bold,
-                        //             decoration: TextDecoration.underline,
-                        //             decorationColor: Colors.white),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // )
                       ],
                     ),
                   ),
@@ -215,4 +169,3 @@ class _SessionviewState extends State<Sessionview> {
     );
   }
 }
-
