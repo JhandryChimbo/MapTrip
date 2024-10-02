@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+// import 'dart:math';
+import 'dart:developer';
 import 'package:front_end/controls/Conexion.dart';
 import 'package:front_end/controls/servicio_back/RespuestaGenerica.dart';
 import 'package:front_end/controls/servicio_back/modelo/InicioSesionSW.dart';
@@ -14,6 +15,8 @@ class Facadeservice {
     final String url = '${c.URL}inicio_sesion';
     final uri = Uri.parse(url);
     InicioSesionSW isw = InicioSesionSW();
+    log(mapa.toString());
+    log(header.toString());
     try {
       final response =
           await http.post(uri, headers: header, body: jsonEncode(mapa));
@@ -40,7 +43,7 @@ class Facadeservice {
     } catch (e) {
       isw.code = 500;
       isw.msg = "Error";
-      isw.tag = "Error Inesperado";
+      isw.tag = e.toString();
       isw.datos = {};
     }
     return isw;

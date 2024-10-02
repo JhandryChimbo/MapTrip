@@ -1,6 +1,9 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:front_end/controls/servicio_back/FacadeService.dart';
 import 'package:validators/validators.dart';
+import 'package:front_end/controls/util/Utiles.dart';
 
 class Sessionview extends StatefulWidget {
   const Sessionview({super.key});
@@ -13,25 +16,62 @@ class _SessionviewState extends State<Sessionview> {
   final TextEditingController correoControl = TextEditingController();
   final TextEditingController claveControl = TextEditingController();
 
+  // void _iniciar() {
+  //   if (_formKey.currentState!.validate()) {
+  //     // Simular la verificación de los datos quemados
+  //     if (correoControl.text == 'jhandrychimbo@gmail.com' &&
+  //         claveControl.text == '123456789') {
+  //       // Redirige a la siguiente pantalla
+  //       Navigator.pushNamedAndRemoveUntil(
+  //         context,
+  //         '/mapa',
+  //         (Route<dynamic> route) => false,
+  //       );
+  //     } else {
+  //       // Mostrar error si los datos son incorrectos
+  //       final SnackBar msg = SnackBar(
+  //         content: const Text("Correo o clave incorrectos"),
+  //       );
+  //       ScaffoldMessenger.of(context).showSnackBar(msg);
+  //     }
+  //   }
+  // }
+
   void _iniciar() {
-    if (_formKey.currentState!.validate()) {
-      // Simular la verificación de los datos quemados
-      if (correoControl.text == 'jhandrychimbo@gmail.com' &&
-          claveControl.text == '123456789') {
-        // Redirige a la siguiente pantalla
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/mapa',
-          (Route<dynamic> route) => false,
-        );
+    setState(() {
+      Facadeservice servicio = Facadeservice();
+      if (_formKey.currentState!.validate()) {
+        Map<String, String> mapa = {
+          "correo": correoControl.text,
+          "clave": claveControl.text
+        };
+        log(mapa.toString());
+
+        servicio.inicioSesion(mapa).then((value) async {
+          if (value.code == 200) {
+            log(value.datos['token']);
+            log(value.datos['user']);
+            Utiles util = Utiles();
+            util.saveValue('token', value.datos['token']);
+            util.saveValue('user', value.datos['user']);
+            util.saveValue('id', value.datos['id']);
+            final SnackBar msg =
+                SnackBar(content: Text("BIENVENIDO ${value.datos['user']}"));
+            ScaffoldMessenger.of(context).showSnackBar(msg);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/mapa',
+              (Route<dynamic> route) => false,
+            );
+          } else {
+            final SnackBar msg = SnackBar(content: Text("Error ${value.tag}"));
+            ScaffoldMessenger.of(context).showSnackBar(msg);
+          }
+        });
       } else {
-        // Mostrar error si los datos son incorrectos
-        final SnackBar msg = SnackBar(
-          content: const Text("Correo o clave incorrectos"),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(msg);
+        log("Errores");
       }
-    }
+    });
   }
 
   @override
