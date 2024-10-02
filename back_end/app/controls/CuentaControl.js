@@ -41,7 +41,13 @@ class CuentaControl {
             user: cuentaA.personal.apellidos + " " + cuentaA.personal.nombres,
             id: cuentaA.personal.external_id,
           };
-          res.status(200).json({ msg: "OK", tag: info, code: 200 });
+          res.status(200);
+            res.json({
+              msg: "OK",
+              tag: "Listo :)",
+              datos: info,
+              code: 200,
+            });
         } else {
           return res
             .status(401)
