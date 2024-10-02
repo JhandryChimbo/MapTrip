@@ -2,8 +2,11 @@
 
 MAP TRIP es una aplicación diseñada para consultar lugares populares de la ciudad de Loja según su tipo. Este proyecto está desarrollado utilizando **Express.js** para el backend y **Flutter** para la aplicación móvil.
 
-<img width="40%" alt="Vista Inicio de Sesión" src="front_end/assets/vistas/inicio_Sesion.jpg">
-<img width="40%" alt="Vista Mapa" src="front_end/assets/vistas/mapa.jpg">
+<div style="display: flex; justify-content: space-between;">
+  <img width="49%" alt="Vista Inicio de Sesión" src="front_end/assets/vistas/inicio_Sesion.jpg">
+  <img width="49%" alt="Vista Mapa" src="front_end/assets/vistas/mapa.jpg">
+</div>
+
 
 ## 🔧 Tecnologías Utilizadas
 
