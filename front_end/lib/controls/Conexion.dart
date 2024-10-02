@@ -6,7 +6,7 @@ import 'package:front_end/controls/util/Utiles.dart';
 
 class Conexion {
   // CASA
-  final String URL = "http://192.168.0.101:3000/maptrip/";
+  final String URL = "http://192.168.0.102:3000/maptrip/";
 
   static bool NO_TOKEN = false;
   //maptrip-token
